@@ -21,53 +21,53 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SOUNDCLOUDAUTHDIALOG_H
-#define SOUNDCLOUDAUTHDIALOG_H
-
-#include <QDialog>
 #include <QUrl>
 #include <QUrlQuery>
-#include "Soundcloud.h"
+#include <QNetworkReply>
+#include <QNetworkRequest>
 
-class QWebView;
-class QVBoxLayout;
+#include "Connection.h"
+#include "Request.h"
 
-class SoundcloudAuthDialog : public QDialog
+namespace Soundcloud {
+
+const char* Connection::SERVICE_URL = "https://api.soundcloud.com/";
+
+Connection::Connection(QObject* parent) :
+    QObject(parent)
 {
-    Q_OBJECT
+}
 
-public:
-    explicit SoundcloudAuthDialog(QWidget *parent = 0);
-    ~SoundcloudAuthDialog();
-    static const QString SUCCESSFUL_REDIRECT_URL;
+void Connection::sendRequest(const Request* request)
+{
+    QUrl requestUrl(SERVICE_URL);
+    QNetworkReply* networkReply;
 
-public:
+    // Set the endpoint path
+    requestUrl.setPath(request->endpoint());
 
-    const QUrl buildOAuthUrl()
-    {
-        QUrl authUrl("https://soundcloud.com/connect");
-        QUrlQuery queryItems;
+    // Build the query
+    QUrlQuery query;
+    QMap<QString, QVariant>::const_iterator it;
 
-        queryItems.addQueryItem("redirect_uri", "https://developers.soundcloud.com/callback.html");
-        queryItems.addQueryItem("response_type", "code_and_token");
-        queryItems.addQueryItem("scope", "non-expiring");
-        queryItems.addQueryItem("display", "popup");
-        queryItems.addQueryItem("client_id", Soundcloud::ClientID);
-
-        authUrl.setQuery(queryItems);
-
-        return authUrl;
+    for (it = request->params().constBegin();
+         it != request->params().constEnd(); it++) {
+        query.addQueryItem(it.key(), it.value().toString());
     }
 
-public slots:
-    void onWebViewUrlChanged(const QUrl& url);
+    // Add the users oauth token
+    query.addQueryItem("oauth_token", accessToken_);
 
-signals:
-    void authenticated(const QString& accessToken);
+    // Set the query
+    requestUrl.setQuery(query);
 
-private:
-    QWebView* _webView;
-    QVBoxLayout* _verticalLayout;
-};
+    // Send the request
+    qDebug() << requestUrl;
 
-#endif // SOUNDCLOUDAUTHDIALOG_H
+    QNetworkRequest networkRequest(requestUrl);
+    networkReply = nam_.get(networkRequest);
+
+    connect(networkReply, SIGNAL(finished()), request, SLOT(finished()));
+}
+
+} // namespace Soundcloud

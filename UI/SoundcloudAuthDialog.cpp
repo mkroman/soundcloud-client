@@ -26,7 +26,7 @@
 #include <QVBoxLayout>
 #include <QSettings>
 
-#include "Soundcloud.h"
+#include "SoundcloudApp.h"
 #include "SoundcloudAuthDialog.h"
 
 const QString SoundcloudAuthDialog::SUCCESSFUL_REDIRECT_URL = "https://developers.soundcloud.com/callback.html";
@@ -64,7 +64,7 @@ void SoundcloudAuthDialog::onWebViewUrlChanged(const QUrl &url)
         accessToken = accessToken.split("&").first();
         accessToken = accessToken.split("=").at(1);
 
-        emit authenticated(accessToken);
+        emit tokenChanged(accessToken);
 
         close();
     }

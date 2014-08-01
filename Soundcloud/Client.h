@@ -21,14 +21,43 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SOUNDCLOUD_H
-#define SOUNDCLOUD_H
+#ifndef SOUNDCLOUD_CLIENT_H
+#define SOUNDCLOUD_CLIENT_H
+
+#include <QObject>
+
+#include "libsoundcloud_global.h"
 
 namespace Soundcloud {
 
-static const char* ClientID = "6eac891d530ac164fb776bbccdc81af6";
+class Response;
+class Connection;
 
+class LIBSOUNDCLOUDSHARED_EXPORT Client : public QObject
+{
+    Q_OBJECT
 
-}
+public:
+    explicit Client(QObject* parent = 0);
+    ~Client();
 
-#endif // SOUNDCLOUD_H
+    /// Request the users personal information
+    void requestPersona();
+
+public:
+
+    /// Set the access token
+    void setAccessToken(const QString& accessToken);
+
+signals:
+
+public slots:
+    void updatePersona(const Response& response);
+
+private:
+    Connection* connection_; /// The soundcloud connection.
+};
+
+} // namespace Soundcloud
+
+#endif // SOUNDCLOUD_CLIENT_H
