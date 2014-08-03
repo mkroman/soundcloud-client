@@ -24,7 +24,7 @@
 #include <QDebug>
 #include "User.h"
 
-namespace Soundcloud {
+namespace SoundCloud {
 
 
 

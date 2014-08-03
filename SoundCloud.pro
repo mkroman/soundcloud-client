@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
 CONFIG += ordered
-SUBDIRS += Soundcloud UI
+SUBDIRS += SoundCloud UI

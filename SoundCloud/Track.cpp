@@ -23,7 +23,7 @@
 
 #include "Track.h"
 
-namespace Soundcloud {
+namespace SoundCloud {
 
 Track Track::fromJson(const QJsonObject& object)
 {

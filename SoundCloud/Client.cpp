@@ -28,7 +28,7 @@
 #include "Response.h"
 #include "Connection.h"
 
-namespace Soundcloud {
+namespace SoundCloud {
 
 Client::Client(QObject* parent) :
     QObject(parent)

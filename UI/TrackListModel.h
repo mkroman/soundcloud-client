@@ -27,7 +27,7 @@
 #include <QList>
 #include <QAbstractItemModel>
 
-#include "../Soundcloud/Track.h"
+#include "../SoundCloud/Track.h"
 
 class TrackListModel : public QAbstractItemModel
 {
@@ -45,10 +45,10 @@ public:
 signals:
 
 public slots:
-    void onTrackSearchResults(Soundcloud::TrackList trackList);
+    void onTrackSearchResults(SoundCloud::TrackList trackList);
 
 protected:
-    Soundcloud::TrackList tracks_;
+    SoundCloud::TrackList tracks_;
 };
 
 #endif // TRACKLISTMODEL_H

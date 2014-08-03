@@ -26,12 +26,12 @@
 #include <QVBoxLayout>
 #include <QSettings>
 
-#include "SoundcloudApp.h"
-#include "SoundcloudAuthDialog.h"
+#include "SoundCloudApp.h"
+#include "SoundCloudAuthDialog.h"
 
-const QString SoundcloudAuthDialog::SUCCESSFUL_REDIRECT_URL = "https://developers.soundcloud.com/callback.html";
+const QString SoundCloudAuthDialog::SUCCESSFUL_REDIRECT_URL = "https://developers.soundcloud.com/callback.html";
 
-SoundcloudAuthDialog::SoundcloudAuthDialog(QWidget *parent) :
+SoundCloudAuthDialog::SoundCloudAuthDialog(QWidget *parent) :
     QDialog(parent)
 {
     resize(437, 566);
@@ -50,13 +50,13 @@ SoundcloudAuthDialog::SoundcloudAuthDialog(QWidget *parent) :
     connect(_webView, SIGNAL(urlChanged(QUrl)), SLOT(onWebViewUrlChanged(QUrl)));
 }
 
-SoundcloudAuthDialog::~SoundcloudAuthDialog()
+SoundCloudAuthDialog::~SoundCloudAuthDialog()
 {
     delete _webView;
     delete _verticalLayout;
 }
 
-void SoundcloudAuthDialog::onWebViewUrlChanged(const QUrl &url)
+void SoundCloudAuthDialog::onWebViewUrlChanged(const QUrl &url)
 {
     if (!url.isEmpty() && url.toString().startsWith(SUCCESSFUL_REDIRECT_URL)) {
         QString accessToken = url.fragment();

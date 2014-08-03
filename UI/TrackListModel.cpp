@@ -101,7 +101,7 @@ QVariant TrackListModel::headerData(int section, Qt::Orientation orientation, in
     return QVariant();
 }
 
-void TrackListModel::onTrackSearchResults(Soundcloud::TrackList trackList)
+void TrackListModel::onTrackSearchResults(SoundCloud::TrackList trackList)
 {
     beginInsertRows(QModelIndex(), 0, trackList.count() - 1);
 

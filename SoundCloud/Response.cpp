@@ -21,53 +21,48 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SOUNDCLOUDAUTHDIALOG_H
-#define SOUNDCLOUDAUTHDIALOG_H
+#include <QNetworkReply>
 
-#include <QDialog>
-#include <QUrl>
-#include <QUrlQuery>
-#include "SoundcloudApp.h"
+#include "Response.h"
 
-class QWebView;
-class QVBoxLayout;
+namespace SoundCloud {
 
-class SoundcloudAuthDialog : public QDialog
+Response::Response(QObject* parent) :
+    QObject(parent)
 {
-    Q_OBJECT
+}
 
-public:
-    explicit SoundcloudAuthDialog(QWidget *parent = 0);
-    ~SoundcloudAuthDialog();
-    static const QString SUCCESSFUL_REDIRECT_URL;
+Response::~Response()
+{
+}
 
-public:
+void Response::networkReplyFinished()
+{
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
 
-    const QUrl buildOAuthUrl()
-    {
-        QUrl authUrl("https://soundcloud.com/connect");
-        QUrlQuery queryItems;
+    // Get the response code
+    int responseCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
 
-        queryItems.addQueryItem("redirect_uri", "https://developers.soundcloud.com/callback.html");
-        queryItems.addQueryItem("response_type", "code_and_token");
-        queryItems.addQueryItem("scope", "non-expiring");
-        queryItems.addQueryItem("display", "popup");
-        queryItems.addQueryItem("client_id", SoundcloudApp::ClientID);
+    if (responseCode == 401) {
+        // The access token has expired or is invalid
+    }
+    else {
+        // Parse the response body
+        QJsonParseError parseError;
+        QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll(), &parseError);
 
-        authUrl.setQuery(queryItems);
+        if (parseError.error == QJsonParseError::NoError) {
+            body_ = jsonDocument;
 
-        return authUrl;
+            emit finished();
+        }
+        else {
+            qDebug() << Q_FUNC_INFO << "Failed in parsing the response!";
+        }
+
     }
 
-public slots:
-    void onWebViewUrlChanged(const QUrl& url);
+    reply->deleteLater();
+}
 
-signals:
-    void tokenChanged(const QString& accessToken);
-
-private:
-    QWebView* _webView;
-    QVBoxLayout* _verticalLayout;
-};
-
-#endif // SOUNDCLOUDAUTHDIALOG_H
+} // namespace Soundcloud

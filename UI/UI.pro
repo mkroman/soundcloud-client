@@ -8,7 +8,7 @@ QT       += core gui webkitwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Soundcloud
+TARGET = SoundCloud
 TEMPLATE = app
 
 CONFIG += c++11
@@ -21,21 +21,21 @@ unix:!macx {
 }
 
 SOURCES += main.cpp\
-    SoundcloudAuthDialog.cpp \
-    SoundcloudApp.cpp \
+    SoundCloudAuthDialog.cpp \
+    SoundCloudApp.cpp \
     TrackListModel.cpp
 
 HEADERS  += \
-    SoundcloudAuthDialog.h \
-    SoundcloudApp.h \
+    SoundCloudAuthDialog.h \
+    SoundCloudApp.h \
     TrackListModel.h
 
-win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Soundcloud/release/ -lSoundcloud
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../Soundcloud/debug/ -lSoundcloud
-else:unix: LIBS += -L$$OUT_PWD/../Soundcloud/ -lSoundcloud
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../SoundCloud/release/ -lSoundCloud
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../SoundCloud/debug/ -lSoundCloud
+else:unix: LIBS += -L$$OUT_PWD/../SoundCloud/ -lSoundCloud
 
-INCLUDEPATH += $$PWD/../Soundcloud
-DEPENDPATH += $$PWD/../Soundcloud
+INCLUDEPATH += $$PWD/../SoundCloud
+DEPENDPATH += $$PWD/../SoundCloud
 
 FORMS += \
-    SoundcloudApp.ui
+    SoundCloudApp.ui

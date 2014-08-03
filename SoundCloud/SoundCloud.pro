@@ -8,7 +8,7 @@ QT       += network
 
 QT       -= gui
 
-TARGET = Soundcloud
+TARGET = SoundCloud
 TEMPLATE = lib
 
 DEFINES += LIBSOUNDCLOUD_LIBRARY
@@ -30,7 +30,7 @@ CONFIG += staticlib
 
 unix {
     target.path = /usr/lib
-    headers.path = /usr/include/Soundcloud
+    headers.path = /usr/include/SoundCloud
     headers.files = $$HEADERS
     INSTALLS += target headers
 }

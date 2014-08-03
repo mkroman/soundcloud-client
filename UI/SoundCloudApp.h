@@ -21,45 +21,56 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SOUNDCLOUD_RESPONSE_H
-#define SOUNDCLOUD_RESPONSE_H
+#ifndef SOUNDCLOUD_H
+#define SOUNDCLOUD_H
 
-#include <QObject>
-#include <QVariant>
-#include <QJsonDocument>
+#include <QMainWindow>
+#include <QSettings>
 
-#include "libsoundcloud_global.h"
+#include "ui_SoundCloudApp.h"
+#include "../SoundCloud/Client.h"
 
-namespace Soundcloud {
+class SoundCloudAuthDialog;
 
-class LIBSOUNDCLOUDSHARED_EXPORT Response : public QObject
+class SoundCloudApp : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit Response(QObject* parent = 0);
-    ~Response();
+    static const char* ClientID;
 
-    /// Returns true if the body isn't empty
-    bool success() { return body_.isEmpty(); }
+    explicit SoundCloudApp(QWidget* parent = 0);
+    ~SoundCloudApp();
 
-    /// Set the response body (this is a json object)
-    void setBody(QJsonDocument document) { body_ = document; }
+    /// Run the main application.
+    void run();
 
-    /// Return the body of the response
-    const QJsonDocument& body() const { return body_; }
+    /// Initialize the user session, etc.
+    void initializeClient();
 
-signals:
-    void finished();
+    /// Return true if the user has already authenticated.
+    bool isAuthenticated();
+
+    /// Return the settings.
+    QSettings& settings()
+    {
+        return _settings;
+    }
 
 public slots:
-    void networkReplyFinished();
+    void tokenChanged(const QString& accessToken);
+    void clientUserProfileUpdated();
+
+    void onSearchButtonPressed();
 
 private:
-    QJsonDocument body_;
+    Ui::SoundCloudApp* ui_;
+    SoundCloud::Client* _client;
 
+    QSettings _settings;
+
+    /// The soundcloud auth dialog.
+    SoundCloudAuthDialog* _authDialog;
 };
 
-} // namespace Soundcloud
-
-#endif // SOUNDCLOUD_RESPONSE_H
+#endif // SOUNDCLOUD_H

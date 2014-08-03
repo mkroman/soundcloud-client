@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SoundcloudApp</class>
- <widget class="QMainWindow" name="SoundcloudApp">
+ <class>SoundCloudApp</class>
+ <widget class="QMainWindow" name="SoundCloudApp">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -90,7 +90,7 @@
   <connection>
    <sender>searchLineEdit</sender>
    <signal>returnPressed()</signal>
-   <receiver>SoundcloudApp</receiver>
+   <receiver>SoundCloudApp</receiver>
    <slot>onSearchButtonPressed()</slot>
    <hints>
     <hint type="sourcelabel">

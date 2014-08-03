@@ -1,4 +1,4 @@
-#include "SoundcloudApp.h"
+#include "SoundCloudApp.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -9,8 +9,8 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationName("mkroman");
     QCoreApplication::setOrganizationDomain("https://github.com/mkroman/soundcloud");
 
-    SoundcloudApp soundcloud;
-    soundcloud.run();
+    SoundCloudApp soundCloud;
+    soundCloud.run();
 
     return a.exec();
 }

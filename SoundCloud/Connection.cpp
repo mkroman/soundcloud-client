@@ -30,7 +30,7 @@
 #include "Connection.h"
 #include "Response.h"
 
-namespace Soundcloud {
+namespace SoundCloud {
 
 const char* Connection::SERVICE_URL = "https://api.soundcloud.com/";
 

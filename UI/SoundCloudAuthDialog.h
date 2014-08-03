@@ -21,56 +21,53 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SOUNDCLOUD_H
-#define SOUNDCLOUD_H
+#ifndef SOUNDCLOUDAUTHDIALOG_H
+#define SOUNDCLOUDAUTHDIALOG_H
 
-#include <QMainWindow>
-#include <QSettings>
+#include <QDialog>
+#include <QUrl>
+#include <QUrlQuery>
+#include "SoundCloudApp.h"
 
-#include "ui_SoundcloudApp.h"
-#include "../Soundcloud/Client.h"
+class QWebView;
+class QVBoxLayout;
 
-class SoundcloudAuthDialog;
-
-class SoundcloudApp : public QMainWindow
+class SoundCloudAuthDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    static const char* ClientID;
+    explicit SoundCloudAuthDialog(QWidget *parent = 0);
+    ~SoundCloudAuthDialog();
+    static const QString SUCCESSFUL_REDIRECT_URL;
 
-    explicit SoundcloudApp(QWidget* parent = 0);
-    ~SoundcloudApp();
+public:
 
-    /// Run the main application.
-    void run();
-
-    /// Initialize the user session, etc.
-    void initializeClient();
-
-    /// Return true if the user has already authenticated.
-    bool isAuthenticated();
-
-    /// Return the settings.
-    QSettings& settings()
+    const QUrl buildOAuthUrl()
     {
-        return _settings;
+        QUrl authUrl("https://soundcloud.com/connect");
+        QUrlQuery queryItems;
+
+        queryItems.addQueryItem("redirect_uri", "https://developers.soundcloud.com/callback.html");
+        queryItems.addQueryItem("response_type", "code_and_token");
+        queryItems.addQueryItem("scope", "non-expiring");
+        queryItems.addQueryItem("display", "popup");
+        queryItems.addQueryItem("client_id", SoundCloudApp::ClientID);
+
+        authUrl.setQuery(queryItems);
+
+        return authUrl;
     }
 
 public slots:
-    void tokenChanged(const QString& accessToken);
-    void clientUserProfileUpdated();
+    void onWebViewUrlChanged(const QUrl& url);
 
-    void onSearchButtonPressed();
+signals:
+    void tokenChanged(const QString& accessToken);
 
 private:
-    Ui::SoundcloudApp* ui_;
-    Soundcloud::Client* _client;
-
-    QSettings _settings;
-
-    /// The soundcloud auth dialog.
-    SoundcloudAuthDialog* _authDialog;
+    QWebView* _webView;
+    QVBoxLayout* _verticalLayout;
 };
 
-#endif // SOUNDCLOUD_H
+#endif // SOUNDCLOUDAUTHDIALOG_H

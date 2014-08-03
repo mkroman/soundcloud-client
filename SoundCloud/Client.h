@@ -21,61 +21,61 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SOUNDCLOUD_CONNECTION_H
-#define SOUNDCLOUD_CONNECTION_H
+#ifndef SOUNDCLOUD_CLIENT_H
+#define SOUNDCLOUD_CLIENT_H
 
 #include <QObject>
-#include <QNetworkAccessManager>
 
 #include "libsoundcloud_global.h"
+#include "User.h"
+#include "Track.h"
 
-namespace Soundcloud {
+namespace SoundCloud {
 
 class Client;
-class Request;
 class Response;
+class Connection;
 
-class LIBSOUNDCLOUDSHARED_EXPORT Connection : public QObject
+class LIBSOUNDCLOUDSHARED_EXPORT Client : public QObject
 {
     Q_OBJECT
 
 public:
-    static const char* SERVICE_URL;
+    explicit Client(QObject* parent = 0);
+    explicit Client(QString& clientId, QObject* parent = 0);
+    ~Client();
 
-    explicit Connection(QObject* parent = 0);
+public:
+    /// Return the current user persona
+    const User& me() const { return me_; }
 
+    /// Request the users personal user information.
+    void updateUserProfile();
+
+    /// Search for a given track
+    void searchTrack(const QString& query);
+
+public:
+    const QString& clientId() const { return clientId_; }
+
+public:
     /// Set the access token
-    void setAccessToken(const QString& accessToken) { accessToken_ = accessToken; }
-
-    /// Send a new request
-    void sendRequest(const Request* request);
-
-    /// Perform a GET request to the given +path+.
-    Response* get(const QString& path);
-
-    /// Perform a GET request to the given +path+ with +params+.
-    Response* get(const QString& path, const QVariantMap& params);
-
-    /// Build a new request URL with a path.
-    ///
-    /// \returns The new request URL.
-    QUrl buildRequestUrl(const QString& path);
-
-    /// Build a new request URL with given +path+ and +params+.
-    ///
-    /// \returns The request URL.
-    QUrl buildRequestUrl(const QString& path, const QVariantMap& params);
+    void setAccessToken(const QString& accessToken);
 
 signals:
+    void userProfileUpdated();
+    void trackSearchResults(QList<Track> trackList);
 
 public slots:
+    void onUserProfile();
+    void onTrackSearchCompleted();
 
 private:
-    Client* client_;
-    QString accessToken_;
-    QNetworkAccessManager nam_;
+    User me_;
+    QString clientId_;
+    Connection* connection_; /// The soundcloud connection.
 };
 
 } // namespace Soundcloud
 
-#endif // SOUNDCLOUD_CONNECTION_H
+#endif // SOUNDCLOUD_CLIENT_H

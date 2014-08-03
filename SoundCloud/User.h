@@ -30,7 +30,7 @@
 
 #include "libsoundcloud_global.h"
 
-namespace Soundcloud {
+namespace SoundCloud {
 
 class LIBSOUNDCLOUDSHARED_EXPORT User
 {

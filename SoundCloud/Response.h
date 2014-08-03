@@ -21,48 +21,45 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <QNetworkReply>
+#ifndef SOUNDCLOUD_RESPONSE_H
+#define SOUNDCLOUD_RESPONSE_H
 
-#include "Response.h"
+#include <QObject>
+#include <QVariant>
+#include <QJsonDocument>
 
-namespace Soundcloud {
+#include "libsoundcloud_global.h"
 
-Response::Response(QObject* parent) :
-    QObject(parent)
+namespace SoundCloud {
+
+class LIBSOUNDCLOUDSHARED_EXPORT Response : public QObject
 {
-}
+    Q_OBJECT
 
-Response::~Response()
-{
-}
+public:
+    explicit Response(QObject* parent = 0);
+    ~Response();
 
-void Response::networkReplyFinished()
-{
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+    /// Returns true if the body isn't empty
+    bool success() { return body_.isEmpty(); }
 
-    // Get the response code
-    int responseCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    /// Set the response body (this is a json object)
+    void setBody(QJsonDocument document) { body_ = document; }
 
-    if (responseCode == 401) {
-        // The access token has expired or is invalid
-    }
-    else {
-        // Parse the response body
-        QJsonParseError parseError;
-        QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll(), &parseError);
+    /// Return the body of the response
+    const QJsonDocument& body() const { return body_; }
 
-        if (parseError.error == QJsonParseError::NoError) {
-            body_ = jsonDocument;
+signals:
+    void finished();
 
-            emit finished();
-        }
-        else {
-            qDebug() << Q_FUNC_INFO << "Failed in parsing the response!";
-        }
+public slots:
+    void networkReplyFinished();
 
-    }
+private:
+    QJsonDocument body_;
 
-    reply->deleteLater();
-}
+};
 
 } // namespace Soundcloud
+
+#endif // SOUNDCLOUD_RESPONSE_H
