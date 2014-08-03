@@ -22,10 +22,9 @@
  */
 
 #include <QDebug>
+#include <QJsonArray>
 
-#include "User.h"
 #include "Client.h"
-#include "Request.h"
 #include "Response.h"
 #include "Connection.h"
 
@@ -99,9 +98,22 @@ void Client::onTrackSearchCompleted()
         return;
     }
 
+    QList<Track> trackList;
     QJsonArray array = response->body().array();
 
-    qDebug() << "Track search:" << response->body();
+    for (QJsonArray::iterator it = array.begin(); it != array.end(); it++) {
+        QJsonObject object = (*it).toObject();
+
+        if (object["kind"].toString() == "track") {
+            Track track = Track::fromJson(object);
+
+            trackList.append(track);
+        }
+    }
+
+    qDebug() << "Track search yielded" << trackList.count() << "results.";
+
+    emit trackSearchResults(trackList);
 
     response->deleteLater();
 }

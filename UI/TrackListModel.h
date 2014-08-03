@@ -21,56 +21,34 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SOUNDCLOUD_H
-#define SOUNDCLOUD_H
+#ifndef TRACKLISTMODEL_H
+#define TRACKLISTMODEL_H
 
-#include <QMainWindow>
-#include <QSettings>
+#include <QList>
+#include <QAbstractItemModel>
 
-#include "ui_SoundcloudApp.h"
-#include "../Soundcloud/Client.h"
+#include "../Soundcloud/Track.h"
 
-class SoundcloudAuthDialog;
-
-class SoundcloudApp : public QMainWindow
+class TrackListModel : public QAbstractItemModel
 {
     Q_OBJECT
-
 public:
-    static const char* ClientID;
+    explicit TrackListModel(QObject* parent = 0);
 
-    explicit SoundcloudApp(QWidget* parent = 0);
-    ~SoundcloudApp();
+    virtual QModelIndex index(int row, int column, const QModelIndex& parent) const;
+    virtual QModelIndex parent(const QModelIndex& child) const;
+    virtual int rowCount(const QModelIndex &parent) const;
+    virtual int columnCount(const QModelIndex &parent) const;
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
-    /// Run the main application.
-    void run();
-
-    /// Initialize the user session, etc.
-    void initializeClient();
-
-    /// Return true if the user has already authenticated.
-    bool isAuthenticated();
-
-    /// Return the settings.
-    QSettings& settings()
-    {
-        return _settings;
-    }
+signals:
 
 public slots:
-    void tokenChanged(const QString& accessToken);
-    void clientUserProfileUpdated();
+    void onTrackSearchResults(Soundcloud::TrackList trackList);
 
-    void onSearchButtonPressed();
-
-private:
-    Ui::SoundcloudApp* ui_;
-    Soundcloud::Client* _client;
-
-    QSettings _settings;
-
-    /// The soundcloud auth dialog.
-    SoundcloudAuthDialog* _authDialog;
+protected:
+    Soundcloud::TrackList tracks_;
 };
 
-#endif // SOUNDCLOUD_H
+#endif // TRACKLISTMODEL_H

@@ -28,6 +28,7 @@
 
 #include "libsoundcloud_global.h"
 #include "User.h"
+#include "Track.h"
 
 namespace Soundcloud {
 
@@ -63,6 +64,7 @@ public:
 
 signals:
     void userProfileUpdated();
+    void trackSearchResults(QList<Track> trackList);
 
 public slots:
     void onUserProfile();

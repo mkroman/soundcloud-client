@@ -25,10 +25,12 @@
 #define SOUNDCLOUD_TRACK_H
 
 #include <QString>
+#include <QList>
 #include <QObject>
 #include <QJsonObject>
 
 #include "libsoundcloud_global.h"
+#include "User.h"
 
 namespace Soundcloud {
 
@@ -46,6 +48,9 @@ public:
 
     QString createdAt() const;
     void setCreatedAt(const QString &createdAt);
+
+    User user() const;
+    void setUser(const User &user);
 
     int userId() const;
     void setUserId(int userId);
@@ -175,6 +180,7 @@ public:
 private:
     int id_;
     QString createdAt_;
+    User user_;
     int userId_;
     QString title_;
     QString permalink_;
@@ -217,6 +223,8 @@ private:
     qint64 originalContentSize_;
     bool userFavorite_;
 };
+
+typedef QList<Track> TrackList;
 
 } // namespace Soundcloud
 

@@ -23,15 +23,27 @@
 
 #include <QDebug>
 
+#include "Track.h"
 #include "SoundcloudApp.h"
+#include "TrackListModel.h"
 #include "SoundcloudAuthDialog.h"
 
 const char* SoundcloudApp::ClientID = "6eac891d530ac164fb776bbccdc81af6";
 
 SoundcloudApp::SoundcloudApp(QWidget *parent) :
-    QWidget(parent)
+    QMainWindow(parent),
+    ui_(new Ui::SoundcloudApp)
 {
+    ui_->setupUi(this);
+
+    TrackListModel* trackListModel = new TrackListModel(this);
+    ui_->trackTableView->setModel(trackListModel);
+    ui_->trackTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     _client = new Soundcloud::Client(this);
+
+    connect(_client, SIGNAL(userProfileUpdated()), SLOT(clientUserProfileUpdated()));
+    connect(_client, &Soundcloud::Client::trackSearchResults, trackListModel, &TrackListModel::onTrackSearchResults);
+    // void trackSearchResults(QList<Track> trackList);
 }
 
 SoundcloudApp::~SoundcloudApp()
@@ -51,12 +63,6 @@ bool SoundcloudApp::isAuthenticated()
 
 void SoundcloudApp::run()
 {
-    connect(_client, &Soundcloud::Client::userProfileUpdated, [this] {
-        qDebug() << Q_FUNC_INFO << "User profile was updated!";
-
-        _client->searchTrack("hello kitty");
-    });
-
     if (!isAuthenticated()) {
         // Show the authentication dialog
 
@@ -73,6 +79,8 @@ void SoundcloudApp::run()
 
 void SoundcloudApp::initializeClient()
 {
+    setVisible(true);
+
     _client->updateUserProfile();
 }
 
@@ -85,4 +93,14 @@ void SoundcloudApp::tokenChanged(const QString &accessToken)
     _settings.setValue("accessToken", accessToken);
     _client->setAccessToken(accessToken);
     initializeClient();
+}
+
+void SoundcloudApp::clientUserProfileUpdated()
+{
+
+}
+
+void SoundcloudApp::onSearchButtonPressed()
+{
+    _client->searchTrack(ui_->searchLineEdit->text());
 }

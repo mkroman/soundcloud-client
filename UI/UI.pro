@@ -15,11 +15,13 @@ CONFIG += c++11
 
 SOURCES += main.cpp\
     SoundcloudAuthDialog.cpp \
-    SoundcloudApp.cpp
+    SoundcloudApp.cpp \
+    TrackListModel.cpp
 
 HEADERS  += \
     SoundcloudAuthDialog.h \
-    SoundcloudApp.h
+    SoundcloudApp.h \
+    TrackListModel.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../Soundcloud/release/ -lSoundcloud
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../Soundcloud/debug/ -lSoundcloud
@@ -27,3 +29,6 @@ else:unix: LIBS += -L$$OUT_PWD/../Soundcloud/ -lSoundcloud
 
 INCLUDEPATH += $$PWD/../Soundcloud
 DEPENDPATH += $$PWD/../Soundcloud
+
+FORMS += \
+    SoundcloudApp.ui

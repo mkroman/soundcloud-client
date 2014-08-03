@@ -29,7 +29,6 @@
 #include "Client.h"
 #include "Connection.h"
 #include "Response.h"
-#include "Request.h"
 
 namespace Soundcloud {
 

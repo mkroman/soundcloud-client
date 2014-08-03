@@ -31,6 +31,7 @@ Track Track::fromJson(const QJsonObject& object)
 
     track.id_ = object["id"].toInt();
     track.createdAt_ = object["created_at"].toString();
+    track.user_ = User::fromJson(object["user"].toObject());
     track.userId_ = object["user_id"].toInt();
     track.title_ = object["title"].toString();
     track.permalink_ = object["permalink"].toString();
@@ -502,6 +503,16 @@ void Track::setUserFavorite(bool userFavorite)
 {
     userFavorite_ = userFavorite;
 }
+User Track::user() const
+{
+    return user_;
+}
+
+void Track::setUser(const User &user)
+{
+    user_ = user;
+}
+
 
 
 
