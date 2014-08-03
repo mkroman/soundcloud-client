@@ -17,14 +17,16 @@ SOURCES += Client.cpp \
     Request.cpp \
     Connection.cpp \
     Response.cpp \
-    User.cpp
+    User.cpp \
+    Track.cpp
 
 HEADERS += libsoundcloud_global.h \
     Client.h \
     Request.h \
     Connection.h \
     Response.h \
-    User.h
+    User.h \
+    Track.h
 
 unix {
     target.path = /usr/lib
