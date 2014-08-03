@@ -13,6 +13,13 @@ TEMPLATE = app
 
 CONFIG += c++11
 
+# Installation
+unix:!macx {
+    target.path = /usr/bin
+
+    INSTALLS += target
+}
+
 SOURCES += main.cpp\
     SoundcloudAuthDialog.cpp \
     SoundcloudApp.cpp \

@@ -26,10 +26,11 @@ HEADERS += libsoundcloud_global.h \
     User.h \
     Track.h
 
-
-CONFIG+= staticlib
+CONFIG += staticlib
 
 unix {
     target.path = /usr/lib
-    INSTALLS += target
+    headers.path = /usr/include/Soundcloud
+    headers.files = $$HEADERS
+    INSTALLS += target headers
 }
