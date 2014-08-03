@@ -31,6 +31,7 @@
 
 namespace Soundcloud {
 
+class Client;
 class Response;
 class Connection;
 
@@ -40,27 +41,36 @@ class LIBSOUNDCLOUDSHARED_EXPORT Client : public QObject
 
 public:
     explicit Client(QObject* parent = 0);
+    explicit Client(QString& clientId, QObject* parent = 0);
     ~Client();
 
 public:
     /// Return the current user persona
     const User& me() const { return me_; }
 
-    /// Request the users personal information
-    void requestPersona();
+    /// Request the users personal user information.
+    void updateUserProfile();
+
+    /// Search for a given track
+    void searchTrack(const QString& query);
 
 public:
+    const QString& clientId() const { return clientId_; }
 
+public:
     /// Set the access token
     void setAccessToken(const QString& accessToken);
 
 signals:
+    void userProfileUpdated();
 
 public slots:
-    void updatePersona(Response* response);
+    void onUserProfile();
+    void onTrackSearchCompleted();
 
 private:
     User me_;
+    QString clientId_;
     Connection* connection_; /// The soundcloud connection.
 };
 

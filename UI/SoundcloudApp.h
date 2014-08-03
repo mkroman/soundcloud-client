@@ -45,7 +45,7 @@ public:
     void run();
 
     /// Initialize the user session, etc.
-    void initialize();
+    void initializeClient();
 
     /// Return true if the user has already authenticated.
     bool isAuthenticated();

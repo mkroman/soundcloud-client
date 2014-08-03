@@ -51,6 +51,12 @@ bool SoundcloudApp::isAuthenticated()
 
 void SoundcloudApp::run()
 {
+    connect(_client, &Soundcloud::Client::userProfileUpdated, [this] {
+        qDebug() << Q_FUNC_INFO << "User profile was updated!";
+
+        _client->searchTrack("hello kitty");
+    });
+
     if (!isAuthenticated()) {
         // Show the authentication dialog
 
@@ -61,13 +67,13 @@ void SoundcloudApp::run()
     }
     else {
         _client->setAccessToken(_settings.value("accessToken").toString());
-        _client->requestPersona();
+        initializeClient();
     }
 }
 
-void SoundcloudApp::initialize()
+void SoundcloudApp::initializeClient()
 {
-
+    _client->updateUserProfile();
 }
 
 void SoundcloudApp::tokenChanged(const QString &accessToken)
@@ -78,5 +84,5 @@ void SoundcloudApp::tokenChanged(const QString &accessToken)
 
     _settings.setValue("accessToken", accessToken);
     _client->setAccessToken(accessToken);
-    _client->requestPersona();
+    initializeClient();
 }

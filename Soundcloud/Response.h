@@ -26,7 +26,7 @@
 
 #include <QObject>
 #include <QVariant>
-#include <QJsonObject>
+#include <QJsonDocument>
 
 #include "libsoundcloud_global.h"
 
@@ -38,28 +38,25 @@ class LIBSOUNDCLOUDSHARED_EXPORT Response : public QObject
 
 public:
     explicit Response(QObject* parent = 0);
+    ~Response();
 
     /// Returns true if the body isn't empty
     bool success() { return body_.isEmpty(); }
 
-    /// Return a single value from the body
-    QJsonValue value(const QString& key) { return body_.value(key); }
-
-    /// Return a single value from the body object as a variant
-    QVariant variant(const QString& key) { return body_.value(key).toVariant(); }
-
     /// Set the response body (this is a json object)
-    void setBody(QJsonObject object) { body_ = object; }
+    void setBody(QJsonDocument document) { body_ = document; }
 
     /// Return the body of the response
-    const QJsonObject& body() const { return body_; }
+    const QJsonDocument& body() const { return body_; }
 
 signals:
+    void finished();
 
 public slots:
+    void networkReplyFinished();
 
 private:
-    QJsonObject body_;
+    QJsonDocument body_;
 
 };
 

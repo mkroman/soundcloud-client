@@ -21,6 +21,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <QNetworkReply>
+
 #include "Response.h"
 
 namespace Soundcloud {
@@ -28,6 +30,39 @@ namespace Soundcloud {
 Response::Response(QObject* parent) :
     QObject(parent)
 {
+}
+
+Response::~Response()
+{
+}
+
+void Response::networkReplyFinished()
+{
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
+
+    // Get the response code
+    int responseCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+
+    if (responseCode == 401) {
+        // The access token has expired or is invalid
+    }
+    else {
+        // Parse the response body
+        QJsonParseError parseError;
+        QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll(), &parseError);
+
+        if (parseError.error == QJsonParseError::NoError) {
+            body_ = jsonDocument;
+
+            emit finished();
+        }
+        else {
+            qDebug() << Q_FUNC_INFO << "Failed in parsing the response!";
+        }
+
+    }
+
+    reply->deleteLater();
 }
 
 } // namespace Soundcloud

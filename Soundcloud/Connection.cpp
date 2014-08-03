@@ -26,6 +26,7 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 
+#include "Client.h"
 #include "Connection.h"
 #include "Response.h"
 #include "Request.h"
@@ -35,40 +36,87 @@ namespace Soundcloud {
 const char* Connection::SERVICE_URL = "https://api.soundcloud.com/";
 
 Connection::Connection(QObject* parent) :
-    QObject(parent)
+    QObject(parent),
+    client_(qobject_cast<Client*>(parent))
 {
 }
 
-void Connection::sendRequest(const Request* request)
+Response* Connection::get(const QString& path)
 {
-    QUrl requestUrl(SERVICE_URL);
-    QNetworkReply* networkReply;
-
-    // Set the endpoint path
-    requestUrl.setPath(request->endpoint());
-
-    // Build the query
-    QUrlQuery query;
-    QMap<QString, QVariant>::const_iterator it;
-
-    for (it = request->params().constBegin();
-         it != request->params().constEnd(); it++) {
-        query.addQueryItem(it.key(), it.value().toString());
-    }
-
-    // Add the users oauth token
-    query.addQueryItem("oauth_token", accessToken_);
-
-    // Set the query
-    requestUrl.setQuery(query);
-
-    // Send the request
-    qDebug() << requestUrl;
-
+    QUrl requestUrl = buildRequestUrl(path);
     QNetworkRequest networkRequest(requestUrl);
+    QNetworkReply* networkReply;
+    Response* soundcloudResponse = new Response(this);
+
     networkReply = nam_.get(networkRequest);
 
-    connect(networkReply, SIGNAL(finished()), request, SLOT(finished()));
+    connect(networkReply, SIGNAL(finished()), soundcloudResponse, SLOT(networkReplyFinished()));
+
+    return soundcloudResponse;
+}
+
+Response* Connection::get(const QString& path, const QVariantMap& params)
+{
+    QUrl requestUrl = buildRequestUrl(path, params);
+    QNetworkRequest networkRequest(requestUrl);
+    QNetworkReply* networkReply;
+    Response* soundcloudResponse = new Response(this);
+
+    networkReply = nam_.get(networkRequest);
+    networkReply->setParent(soundcloudResponse);
+
+    connect(networkReply, SIGNAL(finished()), soundcloudResponse, SLOT(networkReplyFinished()));
+
+    return soundcloudResponse;
+}
+
+QUrl Connection::buildRequestUrl(const QString& path, const QVariantMap& params)
+{
+    QUrl requestUrl(SERVICE_URL);
+    QUrlQuery urlQuery;
+
+    // Add all the variant types as parameters
+    QVariantMap::const_iterator it;
+
+    for (it = params.constBegin(); it != params.constEnd(); it++) {
+        urlQuery.addQueryItem(it.key(), it.value().toString());
+    }
+
+    // Build the resource query
+    if (accessToken_.isEmpty()) {
+        urlQuery.addQueryItem("client_id", client_->clientId());
+    }
+    else {
+        urlQuery.addQueryItem("oauth_token", accessToken_);
+    }
+
+    // Set the resource path
+    requestUrl.setPath(path);
+    // Set the query
+    requestUrl.setQuery(urlQuery);
+
+    return requestUrl;
+}
+
+QUrl Connection::buildRequestUrl(const QString& path)
+{
+    QUrl requestUrl(SERVICE_URL);
+    QUrlQuery urlQuery;
+
+    // Build the resource query
+    if (accessToken_.isEmpty()) {
+        urlQuery.addQueryItem("client_id", client_->clientId());
+    }
+    else {
+        urlQuery.addQueryItem("oauth_token", accessToken_);
+    }
+
+    // Set the resource path
+    requestUrl.setPath(path);
+    // Set the query
+    requestUrl.setQuery(urlQuery);
+
+    return requestUrl;
 }
 
 } // namespace Soundcloud

@@ -37,18 +37,34 @@ Client::Client(QObject* parent) :
     connection_ = new Connection(this);
 }
 
+Client::Client(QString& clientId, QObject* parent) :
+    QObject(parent),
+    clientId_(clientId)
+{
+    connection_ = new Connection(this);
+}
+
 Client::~Client()
 {
     delete connection_;
 }
 
-void Client::requestPersona()
+void Client::updateUserProfile()
 {
-    Request* personaRequest = new Request("/me.json", this);
+    Response* response = connection_->get("/me.json");
 
-    connection_->sendRequest(personaRequest);
+    connect(response, SIGNAL(finished()), SLOT(onUserProfile()));
+}
 
-    connect(personaRequest, SIGNAL(response(Response*)), SLOT(updatePersona(Response*)));
+void Client::searchTrack(const QString &query)
+{
+    Response* response;
+    QVariantMap params;
+
+    params["q"] = query;
+    response = connection_->get("/tracks.json", params);
+
+    connect(response, &Response::finished, this, &Client::onTrackSearchCompleted);
 }
 
 void Client::setAccessToken(const QString& accessToken)
@@ -56,13 +72,36 @@ void Client::setAccessToken(const QString& accessToken)
     connection_->setAccessToken(accessToken);
 }
 
-void Client::updatePersona(Response* response)
+void Client::onUserProfile()
 {
-    User persona = User::fromJson(response->body());
+    Response* response = qobject_cast<Response*>(sender());
+    QJsonObject object = response->body().object();
 
-    qDebug() << "Received persona" << persona.name();
+    User user = User::fromJson(object);
 
-    me_ = persona;
+    qDebug() << "Received user profile. I'm" << user.name();
+
+    me_ = user;
+
+    emit userProfileUpdated();
+
+    // Always remember to free the response
+    response->deleteLater();
+}
+
+void Client::onTrackSearchCompleted()
+{
+    Response* response = qobject_cast<Response*>(sender());
+
+    if (!response->body().isArray()) {
+        qWarning() << Q_FUNC_INFO << "Expected response to be an array!";
+
+        return;
+    }
+
+    QJsonArray array = response->body().array();
+
+    qDebug() << "Track search:" << response->body();
 
     response->deleteLater();
 }

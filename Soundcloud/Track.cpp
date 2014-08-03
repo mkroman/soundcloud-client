@@ -79,6 +79,10 @@ Track::Track()
 {
 }
 
+Track::~Track()
+{
+}
+
 int Track::id() const
 {
     return id_;

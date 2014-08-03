@@ -31,6 +31,7 @@
 
 namespace Soundcloud {
 
+class Client;
 class Request;
 class Response;
 
@@ -49,11 +50,28 @@ public:
     /// Send a new request
     void sendRequest(const Request* request);
 
+    /// Perform a GET request to the given +path+.
+    Response* get(const QString& path);
+
+    /// Perform a GET request to the given +path+ with +params+.
+    Response* get(const QString& path, const QVariantMap& params);
+
+    /// Build a new request URL with a path.
+    ///
+    /// \returns The new request URL.
+    QUrl buildRequestUrl(const QString& path);
+
+    /// Build a new request URL with given +path+ and +params+.
+    ///
+    /// \returns The request URL.
+    QUrl buildRequestUrl(const QString& path, const QVariantMap& params);
+
 signals:
 
 public slots:
 
 private:
+    Client* client_;
     QString accessToken_;
     QNetworkAccessManager nam_;
 };

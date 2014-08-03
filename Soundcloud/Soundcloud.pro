@@ -14,7 +14,6 @@ TEMPLATE = lib
 DEFINES += LIBSOUNDCLOUD_LIBRARY
 
 SOURCES += Client.cpp \
-    Request.cpp \
     Connection.cpp \
     Response.cpp \
     User.cpp \
@@ -22,7 +21,6 @@ SOURCES += Client.cpp \
 
 HEADERS += libsoundcloud_global.h \
     Client.h \
-    Request.h \
     Connection.h \
     Response.h \
     User.h \
