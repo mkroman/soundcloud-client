@@ -32,6 +32,7 @@
 namespace Soundcloud {
 
 class Request;
+class Response;
 
 class LIBSOUNDCLOUDSHARED_EXPORT Connection : public QObject
 {

@@ -24,12 +24,19 @@
 #ifndef LIBSOUNDCLOUD_GLOBAL_H
 #define LIBSOUNDCLOUD_GLOBAL_H
 
+#include <QDebug>
 #include <QtCore/qglobal.h>
 
 #if defined(LIBSOUNDCLOUD_LIBRARY)
 #  define LIBSOUNDCLOUDSHARED_EXPORT Q_DECL_EXPORT
 #else
 #  define LIBSOUNDCLOUDSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#ifndef QT_NO_DEBUG
+#define SC_TEST(x) if (!(x)) { qWarning() << "TEST:" << QString("" # x) << "in file" << __FILE__ << "on line" << __LINE__; }
+#else
+#define SC_TEST(x)
 #endif
 
 #endif // LIBSOUNDCLOUD_GLOBAL_H

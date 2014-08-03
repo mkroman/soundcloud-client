@@ -27,6 +27,7 @@
 #include <QObject>
 
 #include "libsoundcloud_global.h"
+#include "User.h"
 
 namespace Soundcloud {
 
@@ -41,6 +42,10 @@ public:
     explicit Client(QObject* parent = 0);
     ~Client();
 
+public:
+    /// Return the current user persona
+    const User& me() const { return me_; }
+
     /// Request the users personal information
     void requestPersona();
 
@@ -52,9 +57,10 @@ public:
 signals:
 
 public slots:
-    void updatePersona(const Response& response);
+    void updatePersona(Response* response);
 
 private:
+    User me_;
     Connection* connection_; /// The soundcloud connection.
 };
 

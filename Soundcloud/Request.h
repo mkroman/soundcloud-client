@@ -31,13 +31,15 @@
 
 namespace Soundcloud {
 
+class Response;
+
 class LIBSOUNDCLOUDSHARED_EXPORT Request : public QObject
 {
     Q_OBJECT
 public:
     explicit Request(QObject* parent = 0);
-    explicit Request(const QString& endpoint);
-    explicit Request(const QString& endpoint, QVariantMap& params);
+    explicit Request(const QString& endpoint, QObject* parent = 0);
+    explicit Request(const QString& endpoint, QVariantMap& params, QObject* parent = 0);
 
 public:
     /// Set the endpoint
@@ -55,7 +57,7 @@ public:
     const QVariantMap& params() const { return params_; }
 
 signals:
-    void response();
+    void response(Response* response);
 
 public slots:
     void finished();

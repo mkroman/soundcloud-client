@@ -27,6 +27,7 @@
 #include <QNetworkRequest>
 
 #include "Connection.h"
+#include "Response.h"
 #include "Request.h"
 
 namespace Soundcloud {

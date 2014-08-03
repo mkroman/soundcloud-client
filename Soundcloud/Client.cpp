@@ -21,8 +21,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <QDebug>
+
+#include "User.h"
 #include "Client.h"
 #include "Request.h"
+#include "Response.h"
 #include "Connection.h"
 
 namespace Soundcloud {
@@ -40,9 +44,11 @@ Client::~Client()
 
 void Client::requestPersona()
 {
-    Request* personaRequest = new Request("/me.json");
+    Request* personaRequest = new Request("/me.json", this);
 
     connection_->sendRequest(personaRequest);
+
+    connect(personaRequest, SIGNAL(response(Response*)), SLOT(updatePersona(Response*)));
 }
 
 void Client::setAccessToken(const QString& accessToken)
@@ -50,9 +56,15 @@ void Client::setAccessToken(const QString& accessToken)
     connection_->setAccessToken(accessToken);
 }
 
-void Client::updatePersona(const Response& response)
+void Client::updatePersona(Response* response)
 {
+    User persona = User::fromJson(response->body());
 
+    qDebug() << "Received persona" << persona.name();
+
+    me_ = persona;
+
+    response->deleteLater();
 }
 
 } // namespace Soundcloud

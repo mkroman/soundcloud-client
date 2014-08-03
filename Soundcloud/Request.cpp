@@ -22,6 +22,7 @@
  */
 
 #include <QNetworkReply>
+#include <QJsonDocument>
 
 #include "Request.h"
 #include "Response.h"
@@ -33,19 +34,18 @@ Request::Request(QObject* parent) :
 {
 }
 
-Request::Request(const QString &endpoint) :
-    QObject(NULL),
+Request::Request(const QString& endpoint, QObject* parent) :
+    QObject(parent),
     endpoint_(endpoint)
 {
 
 }
 
-Request::Request(const QString &endpoint, QVariantMap &params) :
-    QObject(NULL),
+Request::Request(const QString& endpoint, QVariantMap& params, QObject* parent) :
+    QObject(parent),
     endpoint_(endpoint),
     params_(params)
 {
-
 }
 
 void Request::finished()
@@ -59,7 +59,22 @@ void Request::finished()
         // The access token has expired or is invalid
     }
     else {
-        Response* response = new Response(this);
+        Response* requestResponse = new Response();
+
+        // Parse the response body
+        QJsonParseError parseError;
+        QJsonDocument jsonDocument = QJsonDocument::fromJson(reply->readAll(), &parseError);
+
+        if (parseError.error == QJsonParseError::NoError) {
+            Q_ASSERT(jsonDocument.isObject());
+
+            requestResponse->setBody(jsonDocument.object());
+
+            emit response(requestResponse);
+        }
+        else {
+            qDebug() << Q_FUNC_INFO << "Failed in parsing the response!";
+        }
 
     }
 

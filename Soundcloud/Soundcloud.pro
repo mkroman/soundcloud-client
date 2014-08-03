@@ -16,13 +16,15 @@ DEFINES += LIBSOUNDCLOUD_LIBRARY
 SOURCES += Client.cpp \
     Request.cpp \
     Connection.cpp \
-    Response.cpp
+    Response.cpp \
+    User.cpp
 
 HEADERS += libsoundcloud_global.h \
     Client.h \
     Request.h \
     Connection.h \
-    Response.h
+    Response.h \
+    User.h
 
 unix {
     target.path = /usr/lib
