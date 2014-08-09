@@ -21,6 +21,7 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+#include <QDebug>
 #include <QPainter>
 #include <QStyleOption>
 
@@ -41,4 +42,9 @@ SoundCloudX::~SoundCloudX()
 
 void SoundCloudX::paintEvent(QPaintEvent *)
 {
+}
+
+void SoundCloudX::onUserSearchRequest(const QString userInput)
+{
+    qDebug() << Q_FUNC_INFO << userInput;
 }

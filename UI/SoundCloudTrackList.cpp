@@ -21,33 +21,28 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SOUNDCLOUDMENUBAR_H
-#define SOUNDCLOUDMENUBAR_H
+#include <QDebug>
+#include <QListView>
+#include <QVBoxLayout>
+#include <QScrollArea>
 
-#include <QWidget>
+#include "TrackListModel.h"
+#include "SoundCloudTrackList.h"
 
-namespace Ui {
-class SoundCloudMenuBar;
+SoundCloudTrackList::SoundCloudTrackList(QWidget *parent) :
+    QWidget(parent)
+{
+    scrollArea_ = new QScrollArea(this);
+    verticalLayout_ = new QVBoxLayout(this);
+    verticalLayout_->addWidget(scrollArea_);
+    verticalLayout_->setContentsMargins(0, 0, 0, 0);
+    verticalLayout_->setSpacing(0);
+    setLayout(verticalLayout_);
 }
 
-class SoundCloudMenuBar : public QWidget
+SoundCloudTrackList::~SoundCloudTrackList()
 {
-    Q_OBJECT
+    qDebug() << Q_FUNC_INFO;
+}
 
-public:
-    explicit SoundCloudMenuBar(QWidget *parent = 0);
-    ~SoundCloudMenuBar();
 
-signals:
-    /// Emitted when the user wants to search for something.
-    void userRequestedSearch(const QString userInput);
-
-public slots:
-    void paintEvent(QPaintEvent *);
-    void onSearchFieldReturnPressed();
-
-private:
-    Ui::SoundCloudMenuBar *ui;
-};
-
-#endif // SOUNDCLOUDMENUBAR_H

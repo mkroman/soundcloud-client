@@ -40,7 +40,7 @@ public:
 
 public slots:
     void paintEvent(QPaintEvent *);
-
+    void onUserSearchRequest(const QString input);
 
 private:
     Ui::SoundCloudX *ui;

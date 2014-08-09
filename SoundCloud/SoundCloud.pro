@@ -13,6 +13,8 @@ TEMPLATE = lib
 
 DEFINES += LIBSOUNDCLOUD_LIBRARY
 
+INCLUDEPATH += $$PWD/../
+
 SOURCES += Client.cpp \
     Connection.cpp \
     Response.cpp \

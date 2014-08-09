@@ -22,7 +22,7 @@
  */
 
 #include <QDebug>
-#include "User.h"
+#include <SoundCloud/User.h>
 
 namespace SoundCloud {
 

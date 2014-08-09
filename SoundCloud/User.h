@@ -41,7 +41,6 @@ public:
     User();
     ~User();
 
-
     int id() const;
     void setId(int id);
 

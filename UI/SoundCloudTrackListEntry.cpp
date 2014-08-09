@@ -21,33 +21,17 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SOUNDCLOUDMENUBAR_H
-#define SOUNDCLOUDMENUBAR_H
+#include "SoundCloudTrackListEntry.h"
+#include "ui_SoundCloudTrackListEntry.h"
 
-#include <QWidget>
-
-namespace Ui {
-class SoundCloudMenuBar;
+SoundCloudTrackListEntry::SoundCloudTrackListEntry(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::SoundCloudTrackListEntry)
+{
+    ui->setupUi(this);
 }
 
-class SoundCloudMenuBar : public QWidget
+SoundCloudTrackListEntry::~SoundCloudTrackListEntry()
 {
-    Q_OBJECT
-
-public:
-    explicit SoundCloudMenuBar(QWidget *parent = 0);
-    ~SoundCloudMenuBar();
-
-signals:
-    /// Emitted when the user wants to search for something.
-    void userRequestedSearch(const QString userInput);
-
-public slots:
-    void paintEvent(QPaintEvent *);
-    void onSearchFieldReturnPressed();
-
-private:
-    Ui::SoundCloudMenuBar *ui;
-};
-
-#endif // SOUNDCLOUDMENUBAR_H
+    delete ui;
+}

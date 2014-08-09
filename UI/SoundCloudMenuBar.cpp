@@ -32,6 +32,9 @@ SoundCloudMenuBar::SoundCloudMenuBar(QWidget *parent) :
     ui(new Ui::SoundCloudMenuBar)
 {
     ui->setupUi(this);
+
+    connect(ui->searchField, &QLineEdit::returnPressed, this,
+            &SoundCloudMenuBar::onSearchFieldReturnPressed);
 }
 
 SoundCloudMenuBar::~SoundCloudMenuBar()
@@ -48,3 +51,7 @@ void SoundCloudMenuBar::paintEvent(QPaintEvent *)
     style()->drawPrimitive(QStyle::PE_Widget, &option, &painter, this);
 }
 
+void SoundCloudMenuBar::onSearchFieldReturnPressed()
+{
+    emit userRequestedSearch(ui->searchField->text());
+}
