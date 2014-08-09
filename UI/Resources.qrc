@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/ui">
+        <file>icons/soundcloud_white@2x.png</file>
+        <file>icons/soundcloud_white.png</file>
+        <file>icons/cog2.png</file>
+        <file>icons/cog2@2x.png</file>
+        <file>icons/envelope4.png</file>
+        <file>icons/envelope4@2x.png</file>
+        <file>icons/search44x30.png</file>
+    </qresource>
+</RCC>

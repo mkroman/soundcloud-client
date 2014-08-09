@@ -23,12 +23,16 @@ unix:!macx {
 SOURCES += main.cpp\
     SoundCloudAuthDialog.cpp \
     SoundCloudApp.cpp \
-    TrackListModel.cpp
+    TrackListModel.cpp \
+    SoundCloudX.cpp \
+    SoundCloudMenuBar.cpp
 
 HEADERS  += \
     SoundCloudAuthDialog.h \
     SoundCloudApp.h \
-    TrackListModel.h
+    TrackListModel.h \
+    SoundCloudX.h \
+    SoundCloudMenuBar.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../SoundCloud/release/ -lSoundCloud
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../SoundCloud/debug/ -lSoundCloud
@@ -38,4 +42,9 @@ INCLUDEPATH += $$PWD/../SoundCloud
 DEPENDPATH += $$PWD/../SoundCloud
 
 FORMS += \
-    SoundCloudApp.ui
+    SoundCloudApp.ui \
+    SoundCloudX.ui \
+    SoundCloudMenuBar.ui
+
+RESOURCES += \
+    Resources.qrc
