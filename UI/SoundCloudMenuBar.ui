@@ -30,12 +30,17 @@
 	color: white;
 	border: none;
 	background-color: inherit;
-	padding: 0 2em 0 2em;
+	padding: 0 1.5em 0 1.5em;
 }
 
-QAbstractButton[isActivePane=&quot;true&quot;] {
+QPushButton[isActivePane=&quot;true&quot;] {
 	color: #6f6f75;
 	background-color: #36363b;
+}
+
+
+QPushButton:hover {
+	background-color: #46464b;
 }
 
 QWidget {

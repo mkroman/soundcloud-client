@@ -21,35 +21,9 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SOUNDCLOUDTRACKLIST_H
-#define SOUNDCLOUDTRACKLIST_H
+#include "SoundCloudTrackListView.h"
 
-#include <QWidget>
-
-class QVBoxLayout;
-class QScrollArea;
-class QAbstractItemModel;
-class SoundCloudTrackListView;
-
-class SoundCloudTrackList : public QWidget
+SoundCloudTrackListView::SoundCloudTrackListView(QWidget *parent) :
+    QWidget(parent)
 {
-    Q_OBJECT
-
-public:
-    explicit SoundCloudTrackList(QWidget *parent = 0);
-    ~SoundCloudTrackList();
-
-    /// Set the model class.
-    void setModel(QAbstractItemModel* model);
-
-signals:
-
-public slots:
-
-private:
-    QScrollArea* scrollArea_;
-    QVBoxLayout* verticalLayout_;
-    SoundCloudTrackListView* trackListView_;
-};
-
-#endif // SOUNDCLOUDTRACKLIST_H
+}

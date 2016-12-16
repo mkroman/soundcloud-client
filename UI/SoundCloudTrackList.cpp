@@ -28,21 +28,28 @@
 
 #include "TrackListModel.h"
 #include "SoundCloudTrackList.h"
+#include "SoundCloudTrackListView.h"
 
 SoundCloudTrackList::SoundCloudTrackList(QWidget *parent) :
     QWidget(parent)
 {
     scrollArea_ = new QScrollArea(this);
+    trackListView_ = new SoundCloudTrackListView(this);
     verticalLayout_ = new QVBoxLayout(this);
     verticalLayout_->addWidget(scrollArea_);
     verticalLayout_->setContentsMargins(0, 0, 0, 0);
     verticalLayout_->setSpacing(0);
+
+    scrollArea_->setWidget(trackListView_);
+
     setLayout(verticalLayout_);
 }
 
 SoundCloudTrackList::~SoundCloudTrackList()
 {
     qDebug() << Q_FUNC_INFO;
+
+    delete scrollArea_;
+    delete trackListView_;
+    delete verticalLayout_;
 }
-
-

@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     SoundCloudX.cpp \
     SoundCloudMenuBar.cpp \
     SoundCloudTrackList.cpp \
-    SoundCloudTrackListEntry.cpp
+    SoundCloudTrackListEntry.cpp \
+    SoundCloudTrackListView.cpp
 
 HEADERS  += \
     SoundCloudAuthDialog.h \
@@ -36,7 +37,8 @@ HEADERS  += \
     SoundCloudX.h \
     SoundCloudMenuBar.h \
     SoundCloudTrackList.h \
-    SoundCloudTrackListEntry.h
+    SoundCloudTrackListEntry.h \
+    SoundCloudTrackListView.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../SoundCloud/release/ -lSoundCloud
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../SoundCloud/debug/ -lSoundCloud
